@@ -52,4 +52,16 @@ public class LogoutTest extends WireMockSetup {
 
         assertTokenNotFoundResponse(response.statusCode(), apiResponse.getResult(), apiResponse.getMessage(), validToken);
     }
+
+    @Test
+    @DisplayName("Завершение сессии токена, который ранее не был аутентифицирован")
+    @Severity(SeverityLevel.NORMAL)
+    public void logoutTokenWithoutLoginTest() {
+        authSuccessStub(validToken);
+
+        Response response = sendLogoutRequest(validToken);
+        ApiResponse apiResponse  = response.as(ApiResponse.class);
+
+        assertInvalidTokenResponse(response.statusCode(), apiResponse.getResult(), apiResponse.getMessage());
+    }
 }
